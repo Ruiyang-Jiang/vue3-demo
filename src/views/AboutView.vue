@@ -138,17 +138,9 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
-import { Menu as IconMenu, Message, Setting } from '@element-plus/icons-vue'
-import {
-  Check,
-  Delete,
-  Edit,
-  Search,
-  Star,
-} from '@element-plus/icons-vue'
+import { defineComponent,ref } from 'vue'
 
-export default {
+export default defineComponent({
   data() {
     return {
       isShowCircle1: false,
@@ -226,7 +218,7 @@ export default {
     },
 
   },
-};
+});
 
 </script>
 

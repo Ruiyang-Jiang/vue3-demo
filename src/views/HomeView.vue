@@ -41,22 +41,9 @@
 </template>
 
 <script lang="ts">
-// export default {
-//   data() {
-//     return {
-//       form: {
-//         name: "",
-//       },
-//       buttons: [] as string[],
-//     };
-//   },
-//   methods: {
-//     onSubmit() {
-//       this.buttons.push(this.form.name);
-//     },
-//   },
-// };
-export default {
+import { defineComponent} from 'vue'
+export default defineComponent({
+  
   data() {
     return {
       form: {
@@ -74,32 +61,8 @@ export default {
       this.buttons.splice(index, 1);
     },
   },
-};
-import { ref } from 'vue'
-import { Menu as IconMenu, Message, Setting } from '@element-plus/icons-vue'
-import { reactive } from 'vue'
+});
 
-const item = {
-  date: '02/9/2023',
-  name: 'Ruiyang',
-}
-const tableData = ref(Array.from({ length: 20 }).fill(item))
-const value = ref(0)
-
-const form = reactive({
-  name: '',
-  region: '',
-  date1: '',
-  date2: '',
-  delivery: false,
-  type: [],
-  resource: '',
-  desc: '',
-})
-
-const onSubmit = () => {
-  console.log('submit!')
-}
 </script>
 
 <style scoped>
