@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <router-link to="/">Preset Scenes</router-link> |
+    <!-- <router-link to="/">Preset Scenes</router-link> | -->
     <router-link to="/about">Stage</router-link>
   </nav>
   <router-view/>

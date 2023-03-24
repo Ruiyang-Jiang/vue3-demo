@@ -132,6 +132,21 @@
           <el-color-picker show-alpha id="eu_color_picker4" v-model="color4"/>
         </div>
         </div>
+        <br><br><br><br>
+        <div>
+          <el-form :model="form" label-width="200px">
+            <el-form-item label="preset scene name">
+              <el-input v-model="form.name" style="width: 500px;"/>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit">Create</el-button>
+              <el-button v-for="(button, index) in buttons" :key="button" @click="onDelete(index)">{{ `Delete ${button}` }}</el-button>
+            </el-form-item>
+          </el-form>
+          <div>
+            <el-button v-for="button in buttons" :key="button">{{ button }}</el-button>
+          </div>
+        </div>
       </el-footer>
     </el-container>
 
@@ -165,9 +180,13 @@ export default defineComponent({
       color4: '#000000', // default color
       color5: '#000000', // default color
       color6: '#000000', // default color
-      // 圆形区域的初始位置
       circleTop: 0,
       circleLeft: 0,
+
+      form: {
+        name: "",
+      },
+      buttons: [] as string[],
     };
   },
   methods: {
@@ -215,6 +234,13 @@ export default defineComponent({
     },
     showRGBSCircleM1() {
       this.isShowRGBSCircleM1 = !this.isShowRGBSCircleM1;
+    },
+    onSubmit() {
+      this.buttons.push(this.form.name);
+      this.form.name = ""; // clear the input field after creating a button
+    },
+    onDelete(index: number) {
+      this.buttons.splice(index, 1);
     },
 
   },

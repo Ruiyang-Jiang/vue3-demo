@@ -5,22 +5,8 @@
       
 
       <el-main>
-        <!-- <div>
-          <el-form :model="form" label-width="200px">
-            <el-form-item label="preset scene name">
-              <el-input v-model="form.name" style="width: 500px;"/>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit">Create</el-button>
-              <el-button>delete</el-button>
-            </el-form-item>
-          </el-form>
-          <div>
-            <el-button v-for="button in buttons" :key="button">{{ button }}</el-button>
-          </div>
-        </div> -->
 
-        <div>
+        <!-- <div>
           <el-form :model="form" label-width="200px">
             <el-form-item label="preset scene name">
               <el-input v-model="form.name" style="width: 500px;"/>
@@ -33,7 +19,7 @@
           <div>
             <el-button v-for="button in buttons" :key="button">{{ button }}</el-button>
           </div>
-        </div>
+        </div> -->
 
       </el-main>
     </el-container>
