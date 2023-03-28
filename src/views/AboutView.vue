@@ -42,6 +42,12 @@
         <el-divider /><br><br><br><br><br>  
         <div class="light-second_row">
           <el-row :gutter='20'  justify="center">
+            <el-col :span='2'>
+              <div class="gutter" id="color-picker-container">
+                <el-button type="primary" circle color="#00FF00" @click="showRGBSCircle1">RGBW_S1</el-button>
+                <div v-if="isShowRGBSCircle1" class="RGBSCircle1" :style="{ backgroundColor: color1 }"></div>
+              </div>
+            </el-col>
             <el-col :span='2' >
               <div class="gutter">
                 <el-button type="primary" circle color="#ffffff" @click="showCircle6">WHITE </el-button>
@@ -49,33 +55,15 @@
               </div>
             </el-col>
             <el-col :span='2'>
-              <div class="gutter" id="color-picker-container">
-                <el-button type="primary" circle color="#00FF00" @click="showRGBSCircle1">RGBW_S1</el-button>  <!--id="toggle-color-picker"-->
-                <div v-if="isShowRGBSCircle1" class="RGBSCircle1" :style="{ backgroundColor: color1 }"></div>
-              </div>
-            </el-col>
-            <el-col :span='2'>
-              <div class="gutter">
-                <el-button type="primary" circle color="#ffffff" @click="showCircle7">WHITE </el-button>
-                <div v-if="isShowCircle7" class="circle7"></div>
-              </div>
-            </el-col>
-            <el-col :span='2'>
-             <div class="gutter">
-                <el-button type="primary" circle color="#00FF00" @click="showRGBSCircle2">RGBW_S2</el-button>
-                <div v-if="isShowRGBSCircle2" class="RGBSCircle2" :style="{ backgroundColor: color2 }"></div>
-              </div>
-            </el-col>
-            <el-col :span='2'>
               <div class="gutter">
                 <el-button type="primary" circle color="#FF69B4" @click="showRGBSCircleM1">RGBW_M1</el-button>
                 <div v-if="isShowRGBSCircleM1" class="RGBSCircleM1" :style="{ backgroundColor: color5 }" v-drag></div>
               </div>
-            </el-col>      
+            </el-col> 
             <el-col :span='2'>
-              <div class="gutter">
-                <el-button type="primary" circle color="#FF69B4" @click="showRGBSCircleM2">RGBW_M2</el-button>
-                <div v-if="isShowRGBSCircleM2" class="RGBSCircleM2" :style="{ backgroundColor: color6 }" v-drag></div>
+             <div class="gutter">
+                <el-button type="primary" circle color="#00FF00" @click="showRGBSCircle2">RGBW_S2</el-button>
+                <div v-if="isShowRGBSCircle2" class="RGBSCircle2" :style="{ backgroundColor: color2 }"></div>
               </div>
             </el-col>
             <el-col :span='2'>
@@ -86,8 +74,14 @@
             </el-col>
             <el-col :span='2'>
               <div class="gutter">
-                <el-button type="primary" circle color="#ffffff" @click="showCircle8">WHITE </el-button>
-                <div v-if="isShowCircle8" class="circle8"></div>
+                <el-button type="primary" circle color="#FF69B4" @click="showRGBSCircleM2">RGBW_M2</el-button>
+                <div v-if="isShowRGBSCircleM2" class="RGBSCircleM2" :style="{ backgroundColor: color6 }" v-drag></div>
+              </div>
+            </el-col>
+            <el-col :span='2'>
+              <div class="gutter">
+                <el-button type="primary" circle color="#ffffff" @click="showCircle7">WHITE </el-button>
+                <div v-if="isShowCircle7" class="circle7"></div>
               </div>
             </el-col>
             <el-col :span='2'>
@@ -96,12 +90,6 @@
               <div v-if="isShowRGBSCircle4" class="RGBSCircle4" :style="{ backgroundColor: color4 }"></div>
               </div>
             </el-col>
-            <el-col :span='2'>
-              <div class="gutter">
-                <el-button type="primary" circle color="#ffffff" @click="showCircle9">WHITE </el-button>
-                <div v-if="isShowCircle9" class="circle9"></div>
-              </div>
-            </el-col>  
           </el-row>
         </div>
       </el-main>
@@ -111,21 +99,21 @@
           <p>RGBW_S1 color</p>
           <el-color-picker show-alpha id="eu_color_picker" v-model="color1"/>
         </div>
-        <div class="color-picker-wrapper2">
-          <p>RGBW_S2 color</p>
-          <el-color-picker show-alpha id="eu_color_picker2" v-model="color2"/>
-        </div>
         <div class="color-picker-wrapper-moving1">
           <p>RGBW_M1 color</p>
           <el-color-picker show-alpha id="eu_color_picker4" v-model="color5"/>
         </div>
-        <div class="color-picker-wrapper-moving2">
-          <p>RGBW_M2 color</p>
-          <el-color-picker show-alpha id="eu_color_picker4" v-model="color6"/>
+        <div class="color-picker-wrapper2">
+          <p>RGBW_S2 color</p>
+          <el-color-picker show-alpha id="eu_color_picker2" v-model="color2"/>
         </div>
         <div class="color-picker-wrapper3">
           <p>RGBW_S3 color</p>
           <el-color-picker show-alpha id="eu_color_picker3" v-model="color3"/>
+        </div>
+        <div class="color-picker-wrapper-moving2">
+          <p>RGBW_M2 color</p>
+          <el-color-picker show-alpha id="eu_color_picker4" v-model="color6"/>
         </div>
         <div class="color-picker-wrapper4">
           <p>RGBW_S4 color</p>
@@ -187,6 +175,7 @@ export default defineComponent({
         name: "",
       },
       buttons: [] as string[],
+      
     };
   },
   methods: {
@@ -317,7 +306,7 @@ export default defineComponent({
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-170%, -150%); 
+  transform: translate(-100%, -150%); 
   width: 200px;
   height: 200px;
   border-radius: 50%;
@@ -329,7 +318,7 @@ export default defineComponent({
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-100%, -150%); 
+  transform: translate(0%, -150%); 
   width: 200px;
   height: 200px;
   border-radius: 50%;
@@ -429,20 +418,20 @@ export default defineComponent({
   flex-direction: row;
 }
 .color-picker-wrapper {
-  margin-left: 285px;
-  margin-right: 170px;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 .color-picker-wrapper-moving1 {
-  margin-right: 30px;
+   margin-right: 5%;/*30px; */
 }
 .color-picker-wrapper-moving2 {
-  margin-right: 20px;
+  margin-right:5%; /*20px;*/
 }
 .color-picker-wrapper2 {
-  margin-right: 20px;
+  margin-right:5%; /*20px;*/
 }
 .color-picker-wrapper3 {
-  margin-right: 170px;
+  margin-right:5%; /*170px;*/
 }
 
 
