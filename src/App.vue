@@ -1,6 +1,5 @@
 <template>
   <nav>
-    <!-- <router-link to="/">Preset Scenes</router-link> | -->
     <router-link to="/about">Stage</router-link>
   </nav>
   <router-view/>
@@ -25,3 +24,20 @@ nav {
   }
 }
 </style>
+
+<!-- <template>
+  <div>
+    <AboutView/>
+  </div>
+</template>
+
+<script lang="ts">
+import AboutView from './components/AboutView.vue'
+
+export default {
+  name: 'App',
+  components: {
+    AboutView
+  }
+}
+</script> -->

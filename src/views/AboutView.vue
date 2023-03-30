@@ -3,7 +3,7 @@
   <el-container>
       <el-main style="background-color: #000000;">
         <!-- <div class="stage"></div> -->
-        <br><br><br><br><br>
+        <br><br>
         <div class="light-first_row">
           <el-row :gutter='20' justify="center">
             <el-col :span='2'>
@@ -120,11 +120,11 @@
           <el-color-picker show-alpha id="eu_color_picker4" v-model="color4"/>
         </div>
         </div>
-        <br><br><br><br>
+        <br><br>
         <div>
           <el-form :model="form" label-width="200px">
             <el-form-item label="preset scene name">
-              <el-input v-model="form.name" style="width: 500px;"/>
+              <el-input v-model="form.name" style="width: 500px;"/><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current Scene:</p>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit">Create</el-button>
@@ -135,6 +135,8 @@
             <el-button v-for="button in buttons" :key="button">{{ button }}</el-button>
           </div>
         </div>
+        <br><br>
+        <el-button type="primary">Play current scene</el-button>
       </el-footer>
     </el-container>
 
@@ -142,7 +144,7 @@
 
 <script lang="ts">
 import { defineComponent,ref } from 'vue'
-
+import axios, { AxiosResponse } from 'axios';
 export default defineComponent({
   data() {
     return {
@@ -224,16 +226,41 @@ export default defineComponent({
     showRGBSCircleM1() {
       this.isShowRGBSCircleM1 = !this.isShowRGBSCircleM1;
     },
-    onSubmit() {
-      this.buttons.push(this.form.name);
-      this.form.name = ""; // clear the input field after creating a button
-    },
+    // onSubmit() {
+    //   this.buttons.push(this.form.name);
+    //   this.form.name = ""; // clear the input field after creating a button
+    // },
     onDelete(index: number) {
       this.buttons.splice(index, 1);
     },
 
+    async onSubmit() {
+      // Assuming `serverUrl` and `createSceneRequest` are defined and passed from the component
+      const serverUrl = '192.168.1.13:3000';
+      const createSceneRequest = {
+        // Define the properties of the createSceneRequest object
+        scene: {
+          name: this.form.name,
+          external: false,
+          stage: {
+            fixtures: null,
+          },
+       },
+        // Add other properties as needed
+      };
+      
+      axios.post(`http://${serverUrl}/create-scene`, createSceneRequest);
+      
+      // Do something with the response, e.g., update the component's data
+      this.buttons.push(this.form.name);
+      this.form.name = '';
+      }
+    },
+
+    
+
   },
-});
+);
 
 </script>
 
