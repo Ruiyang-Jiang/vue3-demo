@@ -3,7 +3,7 @@
   <el-container>
       <el-main style="background-color: #000000;">
         <!-- <div class="stage"></div> -->
-        <br><br><br><br><br>
+        <br><br>
         <div class="light-first_row">
           <el-row :gutter='20' justify="center">
             <el-col :span='2'>
@@ -120,11 +120,11 @@
           <el-color-picker show-alpha id="eu_color_picker4" v-model="color4"/>
         </div>
         </div>
-        <br><br><br><br>
+        <br><br>
         <div>
           <el-form :model="form" label-width="200px">
             <el-form-item label="preset scene name">
-              <el-input v-model="form.name" style="width: 500px;"/>
+              <el-input v-model="form.name" style="width: 500px;"/><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current Scene:</p>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit">Create</el-button>
@@ -132,9 +132,11 @@
             </el-form-item>
           </el-form>
           <div>
-            <el-button v-for="button in buttons" :key="button">{{ button }}</el-button>
+            <el-button v-for="(button, index) in buttons" :key="button" :class="buttonClass(index)" @click="callTestUpdateCurrentScene(index)">{{ button }}</el-button>
           </div>
         </div>
+        <br><br>
+        <el-button type="primary" @click="playCurrentScene">Play current scene</el-button>
       </el-footer>
     </el-container>
 
@@ -142,7 +144,8 @@
 
 <script lang="ts">
 import { defineComponent,ref } from 'vue'
-
+import axios, { AxiosResponse } from 'axios';
+import tinycolor from 'tinycolor2';
 export default defineComponent({
   data() {
     return {
@@ -175,7 +178,7 @@ export default defineComponent({
         name: "",
       },
       buttons: [] as string[],
-      
+      activeButton: null as number | null
     };
   },
   methods: {
@@ -208,32 +211,215 @@ export default defineComponent({
     },
     showRGBSCircle1() {
       this.isShowRGBSCircle1 = !this.isShowRGBSCircle1;
+      if (this.isShowRGBSCircle1) {
+        const color = tinycolor(this.color1);
+        const r = color._r;
+        const g = color._g;
+        const b = color._b;
+        const i = Math.round(color._a * 255);
+
+        const data = new Uint8Array([r, g, b, i]);
+
+        const CreateFixtureRequest = {
+          fixture: {
+          id:0,
+          channels:data,
+          },
+        };
+        const serverUrl = '192.168.1.13:3000'; // Replace with your actual server URL
+        axios.post(`http://${serverUrl}/create-fixture`, CreateFixtureRequest);
+        //console.log(0,data);
+      }
     },
     showRGBSCircle2() {
       this.isShowRGBSCircle2 = !this.isShowRGBSCircle2;
+
+      if (this.isShowRGBSCircle2) {
+        const color = tinycolor(this.color2);
+        const r = color._r;
+        const g = color._g;
+        const b = color._b;
+        const i = Math.round(color._a * 255);
+
+        const data = new Uint8Array([r, g, b, i]);
+        const CreateFixtureRequest = {
+          fixture: {
+          id:3,
+          channels:data,
+          },
+        };
+        const serverUrl = '192.168.1.13:3000'; // Replace with your actual server URL
+        axios.post(`http://${serverUrl}/create-fixture`, CreateFixtureRequest);
+        //console.log(2,data);
+      }
     },
     showRGBSCircle3() {
       this.isShowRGBSCircle3 = !this.isShowRGBSCircle3;
+
+      if (this.isShowRGBSCircle3) {
+        const color = tinycolor(this.color3);
+        const r = color._r;
+        const g = color._g;
+        const b = color._b;
+        const i = Math.round(color._a * 255);
+
+        const data = new Uint8Array([r, g, b, i]);
+        const CreateFixtureRequest = {
+          fixture: {
+          id:4,
+          channels:data,
+          },
+        };
+        const serverUrl = '192.168.1.13:3000'; // Replace with your actual server URL
+        axios.post(`http://${serverUrl}/create-fixture`, CreateFixtureRequest);
+        //console.log(3,data);
+      }
     },
     showRGBSCircle4() {
       this.isShowRGBSCircle4 = !this.isShowRGBSCircle4
+
+      if (this.isShowRGBSCircle4) {
+        const color = tinycolor(this.color4);
+        const r = color._r;
+        const g = color._g;
+        const b = color._b;
+        const i = Math.round(color._a * 255);
+
+        const data = new Uint8Array([r, g, b, i]);
+        const CreateFixtureRequest = {
+          fixture: {
+          id:7,
+          channels:data,
+          },
+        };
+        const serverUrl = '192.168.1.13:3000'; // Replace with your actual server URL
+        axios.post(`http://${serverUrl}/create-fixture`, CreateFixtureRequest);
+        //console.log(5,data);
+      }
     },
     showRGBSCircleM2() {
       this.isShowRGBSCircleM2 = !this.isShowRGBSCircleM2
+
+      const uint8Array = new Uint8Array(11);
+      uint8Array[0] = 150;
+      uint8Array[1] = 150;
+      uint8Array[2] = 100;
+      uint8Array[3] = 100;
+      uint8Array[4] = 255;
+      uint8Array[5] = 0;
+      uint8Array[10] = 0;
+
+      if (this.isShowRGBSCircleM2) {
+        const color = tinycolor(this.color6);
+        uint8Array[6] = color._r;
+        uint8Array[7] = color._g;
+        uint8Array[8] = color._b;
+        uint8Array[9] = Math.round(color._a * 255);
+
+        const CreateFixtureRequest = {
+          fixture: {
+          id:5,
+          channels:uint8Array,
+          },
+        };
+        const serverUrl = '192.168.1.13:3000'; // Replace with your actual server URL
+        axios.post(`http://${serverUrl}/create-fixture`, CreateFixtureRequest);
+
+        //console.log(4,uint8Array);
+      }
     },
     showRGBSCircleM1() {
       this.isShowRGBSCircleM1 = !this.isShowRGBSCircleM1;
+
+      const uint8Array = new Uint8Array(11);
+      uint8Array[0] = 150;
+      uint8Array[1] = 150;
+      uint8Array[2] = 100;
+      uint8Array[3] = 100;
+      uint8Array[4] = 255;
+      uint8Array[5] = 0;
+      uint8Array[10] = 0;
+
+      if (this.isShowRGBSCircleM1) {
+        const color = tinycolor(this.color5);
+        uint8Array[6] = color._r;
+        uint8Array[7] = color._g;
+        uint8Array[8] = color._b;
+        uint8Array[9] = Math.round(color._a * 255);
+
+        const CreateFixtureRequest = {
+          fixture: {
+          id:2,
+          channels:uint8Array,
+          },
+        };
+        const serverUrl = '192.168.1.13:3000'; // Replace with your actual server URL
+        axios.post(`http://${serverUrl}/create-fixture`, CreateFixtureRequest);
+
+        //console.log(1,uint8Array);
+      }
     },
-    onSubmit() {
-      this.buttons.push(this.form.name);
-      this.form.name = ""; // clear the input field after creating a button
-    },
+    // onSubmit() {
+    //   this.buttons.push(this.form.name);
+    //   this.form.name = ""; // clear the input field after creating a button
+    // },
     onDelete(index: number) {
-      this.buttons.splice(index, 1);
+      this.buttons.splice(index, 1)
+      this.activeButton = null
+    },
+    onButtonClick(index: number) {
+      if (this.activeButton !== null) {
+        this.activeButton = index
+      }
     },
 
+    async onSubmit() {
+      // Assuming `serverUrl` and `createSceneRequest` are defined and passed from the component
+      const serverUrl = '192.168.1.13:3000';
+      const createSceneRequest = {
+        // Define the properties of the createSceneRequest object
+        scene: {
+          name: this.form.name,
+          external: false,
+          stage: {
+            fixtures: null,
+          },
+       },
+        // Add other properties as needed
+      };
+      
+      axios.post(`http://${serverUrl}/create-scene`, createSceneRequest);
+      
+      // Do something with the response, e.g., update the component's data
+      this.buttons.push(this.form.name);
+      this.form.name = '';
+      },
+      
+    async callTestUpdateCurrentScene(index:number) {
+      const sceneName = this.buttons[index];
+      const UpdateCurrentSceneRequest ={name:sceneName,};
+      const serverUrl = '192.168.1.13:3000'; // Replace with your actual server URL
+      axios.post(`http://${serverUrl}/update-current-scene`, UpdateCurrentSceneRequest);
+    },
+
+    async playCurrentScene() {
+      const serverUrl = '192.168.1.13:3000';
+      axios.post('http://${serverUrl}/play-scene');
+    },
   },
-});
+    computed: {
+      buttonClass() {
+        return (index:number) => {
+          return {
+            'active': index === this.activeButton
+          }
+        }
+    }
+},
+    
+
+  },
+);
 
 </script>
 
@@ -432,6 +618,10 @@ export default defineComponent({
 }
 .color-picker-wrapper3 {
   margin-right:5%; /*170px;*/
+}
+.active {
+  background-color: blue;
+  color: white;
 }
 
 
