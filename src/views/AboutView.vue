@@ -132,7 +132,7 @@
             </el-form-item>
           </el-form>
           <div>
-            <el-button v-for="button in buttons" :key="button">{{ button }}</el-button>
+            <el-button v-for="(button, index) in buttons" :key="button" :class="buttonClass(index)" @click="callTestUpdateCurrentScene(index)">{{ button }}</el-button>
           </div>
         </div>
         <br><br>
@@ -177,7 +177,7 @@ export default defineComponent({
         name: "",
       },
       buttons: [] as string[],
-      
+      activeButton: null as number | null
     };
   },
   methods: {
@@ -231,7 +231,13 @@ export default defineComponent({
     //   this.form.name = ""; // clear the input field after creating a button
     // },
     onDelete(index: number) {
-      this.buttons.splice(index, 1);
+      this.buttons.splice(index, 1)
+      this.activeButton = null
+    },
+    onButtonClick(index: number) {
+      if (this.activeButton !== null) {
+        this.activeButton = index
+      }
     },
 
     async onSubmit() {
@@ -254,9 +260,24 @@ export default defineComponent({
       // Do something with the response, e.g., update the component's data
       this.buttons.push(this.form.name);
       this.form.name = '';
-      }
+      },
+      
+    async callTestUpdateCurrentScene(index:number) {
+      const sceneName = this.buttons[index];
+      const UpdateCurrentSceneRequest ={name:sceneName,};
+      const serverUrl = '192.168.1.13:3000'; // Replace with your actual server URL
+      axios.post(`http://${serverUrl}/update-current-scene`, UpdateCurrentSceneRequest);
     },
-
+  },
+    computed: {
+      buttonClass() {
+        return (index:number) => {
+          return {
+            'active': index === this.activeButton
+          }
+        }
+    }
+},
     
 
   },
@@ -459,6 +480,10 @@ export default defineComponent({
 }
 .color-picker-wrapper3 {
   margin-right:5%; /*170px;*/
+}
+.active {
+  background-color: blue;
+  color: white;
 }
 
 
