@@ -20,6 +20,7 @@
     "cors": "^2.8.5",
     "element-plus": "^2.2.29",
     "protobufjs": "^7.2.3",
+    "tinycolor2": "^1.6.0",
     "v-drag": "^3.0.9",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/electron-devtools-installer": "^2.2.0",
+    "@types/tinycolor2": "^1.4.3",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-typescript": "~5.0.0",
