@@ -57,7 +57,7 @@
             <el-col :span='2'>
               <div class="gutter">
                 <el-button type="primary" circle color="#FF69B4" @click="showRGBSCircleM1">RGBW_M1</el-button>
-                <div v-if="isShowRGBSCircleM1" class="RGBSCircleM1" :style="{ backgroundColor: color5 }" v-drag></div>
+                <div v-if="isShowRGBSCircleM1" class="RGBSCircleM1" :style="{ backgroundColor: color5}" v-drag @mousedown="updateRGBSCircleM1Position"></div>
               </div>
             </el-col> 
             <el-col :span='2'>
@@ -75,7 +75,7 @@
             <el-col :span='2'>
               <div class="gutter">
                 <el-button type="primary" circle color="#FF69B4" @click="showRGBSCircleM2">RGBW_M2</el-button>
-                <div v-if="isShowRGBSCircleM2" class="RGBSCircleM2" :style="{ backgroundColor: color6 }" v-drag></div>
+                <div v-if="isShowRGBSCircleM2" class="RGBSCircleM2" :style="{ backgroundColor: color6 }" v-drag @mousedown="updateRGBSCircleM2Position"></div>
               </div>
             </el-col>
             <el-col :span='2'>
@@ -136,7 +136,7 @@
           </div>
         </div>
         <br><br>
-        <el-button type="primary" @click="playCurrentScene">Play current scene</el-button>
+        <el-button class="playCurrentScene" type="primary" @click="playCurrentScene">Play current scene</el-button>
       </el-footer>
     </el-container>
 
@@ -146,6 +146,7 @@
 import { defineComponent,ref } from 'vue'
 import axios, { AxiosResponse } from 'axios';
 import tinycolor from 'tinycolor2';
+import draggable from "vuedraggable";
 export default defineComponent({
   data() {
     return {
@@ -156,8 +157,6 @@ export default defineComponent({
       isShowCircle5: false,
       isShowCircle6: false,
       isShowCircle7: false,
-      isShowCircle8: false,
-      isShowCircle9: false,
       isShowRGBSCircle1: false,
       isShowRGBSCircle2: false,
       isShowRGBSCircle3: false,
@@ -178,7 +177,11 @@ export default defineComponent({
         name: "",
       },
       buttons: [] as string[],
-      activeButton: null as number | null
+      activeButton: null as number | null,
+      left1: 0,
+      top1: 0,
+      left2: 0,
+      top2: 0,
     };
   },
   methods: {
@@ -199,15 +202,35 @@ export default defineComponent({
     },
     showCircle6() {
       this.isShowCircle6 = !this.isShowCircle6;
+      if (this.isShowCircle6) {
+        const a = 255;
+
+        const data = new Uint8Array([a]);
+        const CreateFixtureRequest = {
+          fixture: {
+          id:1,
+          channels:data,
+          },
+        };
+        const serverUrl = '192.168.1.13:3000'; // Replace with your actual server URL
+        axios.post(`http://${serverUrl}/create-fixture`, CreateFixtureRequest);
+      }
     },
     showCircle7() {
       this.isShowCircle7 = !this.isShowCircle7;
-    },
-    showCircle8() {
-      this.isShowCircle8 = !this.isShowCircle8;
-    },
-    showCircle9() {
-      this.isShowCircle9 = !this.isShowCircle9;
+      if (this.isShowCircle7) {
+        const a = 255;
+
+        const data = new Uint8Array([a]);
+        const CreateFixtureRequest = {
+          fixture: {
+          id:6,
+          channels:data,
+          },
+        };
+        const serverUrl = '192.168.1.13:3000'; // Replace with your actual server URL
+        axios.post(`http://${serverUrl}/create-fixture`, CreateFixtureRequest);
+      }
     },
     showRGBSCircle1() {
       this.isShowRGBSCircle1 = !this.isShowRGBSCircle1;
@@ -301,8 +324,8 @@ export default defineComponent({
       this.isShowRGBSCircleM2 = !this.isShowRGBSCircleM2
 
       const uint8Array = new Uint8Array(11);
-      uint8Array[0] = 150;
-      uint8Array[1] = 150;
+      uint8Array[0] = this.left2;
+      uint8Array[1] = this.top2;
       uint8Array[2] = 100;
       uint8Array[3] = 100;
       uint8Array[4] = 255;
@@ -325,15 +348,50 @@ export default defineComponent({
         const serverUrl = '192.168.1.13:3000'; // Replace with your actual server URL
         axios.post(`http://${serverUrl}/create-fixture`, CreateFixtureRequest);
 
-        //console.log(4,uint8Array);
+        //console.log(1,uint8Array);
       }
     },
+
+    updateRGBSCircleM2Position(e: MouseEvent) {
+      //console.log("2");
+      const el = e.target as HTMLElement;
+      if (!el) return;
+      // 计算初始偏移量
+      const offsetX = e.clientX - el.getBoundingClientRect().left;
+      const offsetY = e.clientY - el.getBoundingClientRect().top;
+
+      let newLeft = this.left2;
+      let newTop = this.top2;
+
+      const onMouseMove = (e: MouseEvent) => {
+       // 根据鼠标移动计算元素新位置
+        newLeft = (e.clientX - offsetX)/5;
+        newTop = (e.clientY - offsetY)/5;
+      };
+
+      const onMouseUp = () => {
+        // 更新元素位置
+        this.left2 = newLeft;
+        this.top2 = newTop;
+        console.log("1", newLeft, newTop);
+
+        // 清除鼠标移动和鼠标抬起事件监听器
+        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseup", onMouseUp);
+      };
+
+      // 添加鼠标移动和鼠标抬起事件监听器
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseUp);
+      
+    },
+
     showRGBSCircleM1() {
       this.isShowRGBSCircleM1 = !this.isShowRGBSCircleM1;
 
       const uint8Array = new Uint8Array(11);
-      uint8Array[0] = 150;
-      uint8Array[1] = 150;
+      uint8Array[0] = this.left1;
+      uint8Array[1] = this.top1;
       uint8Array[2] = 100;
       uint8Array[3] = 100;
       uint8Array[4] = 255;
@@ -356,13 +414,49 @@ export default defineComponent({
         const serverUrl = '192.168.1.13:3000'; // Replace with your actual server URL
         axios.post(`http://${serverUrl}/create-fixture`, CreateFixtureRequest);
 
-        //console.log(1,uint8Array);
+        console.log(1,uint8Array);
       }
     },
+    updateRGBSCircleM1Position(e: MouseEvent) {
+      console.log("1");
+      const el = e.target as HTMLElement;
+      if (!el) return;
+      // 计算初始偏移量
+      const offsetX = e.clientX - el.getBoundingClientRect().left;
+      const offsetY = e.clientY - el.getBoundingClientRect().top;
+
+      let newLeft = this.left1;
+      let newTop = this.top1;
+
+      const onMouseMove = (e: MouseEvent) => {
+       // 根据鼠标移动计算元素新位置
+        newLeft = (e.clientX - offsetX)/5;
+        newTop = (e.clientY - offsetY)/5;
+      };
+
+      const onMouseUp = () => {
+        // 更新元素位置
+        this.left1 = newLeft;
+        this.top1 = newTop;
+        console.log("1", newLeft, newTop);
+
+        // 清除鼠标移动和鼠标抬起事件监听器
+        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseup", onMouseUp);
+      };
+
+      // 添加鼠标移动和鼠标抬起事件监听器
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseUp);
+    },
+
+
     // onSubmit() {
     //   this.buttons.push(this.form.name);
     //   this.form.name = ""; // clear the input field after creating a button
     // },
+
+
     onDelete(index: number) {
       this.buttons.splice(index, 1)
       this.activeButton = null
@@ -414,10 +508,13 @@ export default defineComponent({
             'active': index === this.activeButton
           }
         }
-    }
-},
+      }
+    },
+    components: {
+      draggable,
+    },
     
-
+    
   },
 );
 
@@ -586,8 +683,8 @@ export default defineComponent({
   position: absolute;
   width: 200px;
   height: 200px;
-  transform: translate(40%, -150%); 
   border-radius: 50%;
+  transform: translate(40%, -150%); 
   opacity: 70%;
 }
 .RGBSCircleM2{
@@ -623,6 +720,8 @@ export default defineComponent({
   background-color: blue;
   color: white;
 }
-
+.playCurrentScene{
+  margin-bottom: 100px;
+}
 
 </style>
