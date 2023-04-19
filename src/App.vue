@@ -3,7 +3,20 @@
     <router-link to="/about">Stage</router-link>
   </nav>
   <router-view/>
+  <!-- <div>
+    <AboutView/>
+  </div> -->
 </template>
+
+<!-- <script lang="ts">
+import AboutView from './views/AboutView.vue'
+
+export default {
+  components: {
+    AboutView
+  }
+}
+</script> -->
 
 <style lang="less">
 #app {
@@ -25,19 +38,5 @@ nav {
 }
 </style>
 
-<!-- <template>
-  <div>
-    <AboutView/>
-  </div>
-</template>
 
-<script lang="ts">
-import AboutView from './components/AboutView.vue'
 
-export default {
-  name: 'App',
-  components: {
-    AboutView
-  }
-}
-</script> -->
